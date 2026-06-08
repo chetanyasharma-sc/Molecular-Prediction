@@ -1,0 +1,11 @@
+pandas
+numpy
+scikit-learn
+rdkitpython
+lightgbm
+matplotlib
+jupyter
+joblib
+fastapi
+uvicorn
+python-multipart
