@@ -1,10 +1,12 @@
 pandas
 numpy
 scikit-learn
-rdkitpython
+rdkit
+xgboost
 lightgbm
 matplotlib
 jupyter
+ipykernel
 joblib
 fastapi
 uvicorn
