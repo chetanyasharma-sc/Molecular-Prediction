@@ -14,12 +14,20 @@
 </button>
 
       <div v-if="result" class="result">
-        <h2>Result</h2>
-        <p><strong>SMILES:</strong> {{ result.smiles }}</p>
-        <p><strong>Predicted LogS:</strong> {{ result.predicted_solubility.toFixed(3) }}</p>
-        <p class="note">Estimated ML prediction, not lab-confirmed.</p>
-      </div>
+  <h2>Prediction Result</h2>
 
+  <div
+    v-if="result.molecule_svg"
+    class="molecule"
+    v-html="result.molecule_svg"
+  ></div>
+
+  <p><strong>SMILES:</strong> {{ result.smiles }}</p>
+  <p><strong>Predicted LogS:</strong> {{ result.predicted_solubility.toFixed(3) }}</p>
+  <p><strong>Category:</strong> {{ result.category }}</p>
+  <p><strong>Model:</strong> {{ result.model }}</p>
+  <p class="note">{{ result.note }}</p>
+</div>
       <p v-if="error" class="error">{{ error }}</p>
     </section>
   </main>
@@ -71,6 +79,10 @@ const predictSolubility = async () => {
 }
 </script>
 
+
+
+
+
 <style>
 .page {
   min-height: 100vh;
@@ -80,6 +92,16 @@ const predictSolubility = async () => {
   align-items: center;
   justify-content: center;
   font-family: Arial, sans-serif;
+}
+
+
+.molecule {
+  margin: 20px 0;
+  padding: 16px;
+  border-radius: 16px;
+  background: white;
+  display: flex;
+  justify-content: center;
 }
 
 .card {
