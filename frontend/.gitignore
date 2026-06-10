@@ -22,3 +22,12 @@ logs
 .env
 .env.*
 !.env.example
+
+backend/.venv/
+backend/venv/
+.venv/
+venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+frontend/node_modules/

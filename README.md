@@ -278,3 +278,252 @@ We will generate:
 * machine learning input features
 
 This is where chemistry becomes machine learning.
+
+
+
+
+Create/replace your root `README.md` with this:
+
+````md
+# Molecular Solubility Prediction App
+
+A full-stack machine learning application that predicts molecular solubility from a SMILES string.
+
+## What This Project Does
+
+The user enters a molecular SMILES string, and the app returns a predicted LogS solubility value.
+
+Example:
+
+```json
+{
+  "smiles": "CCO",
+  "predicted_solubility": 1.06
+}
+````
+
+## Project Status
+
+Completed:
+
+* Created GitHub repo and `develop` branch
+* Built backend with FastAPI
+* Built frontend with Nuxt/Vue
+* Downloaded ESOL solubility dataset
+* Converted SMILES into RDKit molecule objects
+* Generated Morgan fingerprints
+* Added molecular descriptors
+* Trained multiple regression models
+* Compared model performance
+* Selected best model
+* Saved trained model as `best_model.pkl`
+* Created prediction API
+* Connected frontend to backend
+
+## ML Pipeline
+
+```text
+SMILES string
+    ↓
+RDKit molecule
+    ↓
+Morgan fingerprints + molecular descriptors
+    ↓
+Trained ML model
+    ↓
+Predicted LogS solubility
+```
+
+## Features Used
+
+The model uses:
+
+* Morgan fingerprint: 2048 bits
+* Molecular Weight
+* LogP
+* TPSA
+* Hydrogen bond donors
+* Hydrogen bond acceptors
+* Number of rings
+* Rotatable bonds
+
+Total features:
+
+```text
+2048 + 7 = 2055 features
+```
+
+## Models Compared
+
+Models trained and evaluated:
+
+* Linear Regression
+* Ridge Regression
+* Random Forest
+* Gradient Boosting
+* XGBoost
+* LightGBM
+* Neural Network
+
+Best model:
+
+```text
+LightGBM
+```
+
+## Best Model Performance
+
+```text
+MAE:  0.497
+RMSE: 0.709
+R²:   0.893
+```
+
+## Example Predictions
+
+### Ethanol
+
+```text
+SMILES: CCO
+Actual LogS: 1.10
+Predicted LogS: ~1.06
+```
+
+### Benzene
+
+```text
+SMILES: c1ccccc1
+Actual LogS: 1.64
+Predicted LogS: ~1.74
+```
+
+### Paracetamol
+
+```text
+SMILES: CC(=O)NC1=CC=C(C=C1)O
+Approx Actual LogS: ~-1.1
+Predicted LogS: ~-1.3
+```
+
+## Project Structure
+
+```text
+Molecular-Prediction/
+├── backend/
+│   ├── app/
+│   │   └── main.py
+│   ├── data/
+│   │   └── esol.csv
+│   ├── models/
+│   │   └── best_model.pkl
+│   ├── notebooks/
+│   │   └── 01_data_exploration.ipynb
+│   ├── src/
+│   │   ├── featurize.py
+│   │   └── predict.py
+│   ├── requirements.txt
+│   └── .venv/
+│
+├── frontend/
+│   ├── app.vue
+│   ├── package.json
+│   └── nuxt.config.ts
+│
+└── README.md
+```
+
+## Backend
+
+The backend is built with FastAPI.
+
+Run backend:
+
+```bash
+cd backend
+source .venv/bin/activate
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+API docs:
+
+```text
+/docs
+```
+
+Prediction endpoint:
+
+```text
+POST /predict
+```
+
+Request:
+
+```json
+{
+  "smiles": "CCO"
+}
+```
+
+Response:
+
+```json
+{
+  "smiles": "CCO",
+  "predicted_solubility": 1.06
+}
+```
+
+## Frontend
+
+The frontend is built with Nuxt/Vue.
+
+Run frontend:
+
+```bash
+cd frontend
+npm install
+npm run dev -- --host 0.0.0.0
+```
+
+## Technologies Used
+
+* Python
+* FastAPI
+* RDKit
+* pandas
+* NumPy
+* scikit-learn
+* XGBoost
+* LightGBM
+* joblib
+* Nuxt
+* Vue
+* GitHub Codespaces
+
+## Important Note
+
+This project is an educational ML prototype. Predictions are model estimates and should not be treated as lab-confirmed experimental values.
+
+## Future Improvements
+
+Planned improvements:
+
+* Add solubility category
+* Add molecular descriptor output
+* Add Lipinski Rule of 5
+* Add confidence/applicability warning
+* Add toxicity prediction
+* Add ADMET prediction
+* Add model retraining pipeline
+* Improve frontend UI
+* Deploy backend and frontend publicly
+
+````
+
+Then commit:
+
+```bash
+git add README.md
+git commit -m "Add project README"
+git push
+````
