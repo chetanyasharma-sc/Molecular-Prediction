@@ -2,7 +2,12 @@ import os
 import joblib
 from rdkit import Chem
 from rdkit.Chem import Draw
-from src.featurize import smiles_to_fingerprint
+
+from src.featurize import (
+    smiles_to_fingerprint,
+    get_molecular_descriptors,
+    lipinski_rule
+)
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 MODEL_PATH = os.path.join(BASE_DIR, "models", "best_model.pkl")
@@ -20,6 +25,7 @@ def solubility_category(logs: float):
 
 def molecule_svg(smiles: str):
     mol = Chem.MolFromSmiles(smiles)
+
     if mol is None:
         return None
 
@@ -30,17 +36,23 @@ def molecule_svg(smiles: str):
     return drawer.GetDrawingText()
 
 def predict_solubility(smiles: str):
-    fingerprint = smiles_to_fingerprint(smiles)
+    mol = Chem.MolFromSmiles(smiles)
 
-    if fingerprint is None:
+    if mol is None:
         return {"error": "Invalid SMILES string"}
 
+    fingerprint = smiles_to_fingerprint(smiles)
     prediction = float(model.predict(fingerprint)[0])
+
+    descriptors = get_molecular_descriptors(mol)
+    lipinski = lipinski_rule(descriptors)
 
     return {
         "smiles": smiles,
         "predicted_solubility": prediction,
         "category": solubility_category(prediction),
+        "descriptors": descriptors,
+        "lipinski": lipinski,
         "molecule_svg": molecule_svg(smiles),
         "model": "LightGBM",
         "note": "Estimated ML prediction, not lab-confirmed."
