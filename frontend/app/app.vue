@@ -1,5 +1,13 @@
+
+
 <template>
   <main class="page">
+    <div class="chem-bg"></div>
+    <div
+  v-if="result?.molecule_svg"
+  class="background-molecule"
+  v-html="result.molecule_svg"
+></div>
   
     <section class="card">
       <h1>Molecular Solubility Predictor</h1>
@@ -65,12 +73,28 @@
 </template>
 
 <script setup>
-import { ref } from "vue"
+import { ref, onMounted, onUnmounted } from "vue"
 
 const smiles = ref("")
 const result = ref(null)
 const error = ref("")
 const loading = ref(false)
+
+onMounted(() => {
+  const moveBg = (event) => {
+    const x = event.clientX / window.innerWidth
+    const y = event.clientY / window.innerHeight
+
+    document.documentElement.style.setProperty("--mouse-x", `${(x - 0.5) * 40}px`)
+    document.documentElement.style.setProperty("--mouse-y", `${(y - 0.5) * 40}px`)
+  }
+
+  window.addEventListener("mousemove", moveBg)
+
+  onUnmounted(() => {
+    window.removeEventListener("mousemove", moveBg)
+  })
+})
 
 const predictSolubility = async () => {
   result.value = null
@@ -113,7 +137,6 @@ const predictSolubility = async () => {
 
 
 
-
 <style>
 .page {
   min-height: 100vh;
@@ -124,25 +147,8 @@ const predictSolubility = async () => {
   justify-content: center;
   font-family: Arial, sans-serif;
 }
-.chemistry-bg {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  opacity: 0.08;
 
-  background-image:
-    url("/molecules/benzene.svg"),
-    url("/molecules/caffeine.svg"),
-    url("/molecules/quinazoline.svg");
 
-  background-size: 220px;
-  background-repeat: repeat;
-}
-
-.card {
-  position: relative;
-  z-index: 10;
-}
 
 .molecule {
   margin: 20px 0;
@@ -154,6 +160,9 @@ const predictSolubility = async () => {
 }
 
 .card {
+  position: relative;
+  z-index: 10;
+
   width: 100%;
   max-width: 520px;
   padding: 32px;
@@ -232,4 +241,35 @@ button {
   border-radius: 14px;
   background: rgba(21, 128, 61, 0.15);
 }
+
+
+.chem-bg {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(6, 182, 212, 0.13), transparent 260px),
+    radial-gradient(circle at 80% 70%, rgba(99, 102, 241, 0.12), transparent 300px);
+}
+
+
+
+
+
+.background-molecule {
+  position: fixed;
+
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%) scale(5);
+
+  opacity: 0.08;
+
+  z-index: 0;
+  pointer-events: none;
+}
+
 </style>
